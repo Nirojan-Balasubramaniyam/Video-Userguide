@@ -237,10 +237,11 @@
       height: auto;
     }
 
-    .menu-toggle{
+    .menu-toggle {
       padding: 0px 5px;
     }
-    .intro-para{
+
+    .intro-para {
       text-align: justify;
     }
 
@@ -255,11 +256,12 @@
         top: 0;
         left: 0;
         position: fixed;
-        transition: height 0.3s ease, visibility 0.3s ease;
+        /* transition: height 0.3s ease, visibility 0.3s ease; */
         visibility: hidden;
         z-index: 1050;
         -ms-overflow-style: none;
         scrollbar-width: none;
+         transition: height 0.4s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.4s linear;
       }
 
       .sidebar::-webkit-scrollbar {
@@ -279,14 +281,21 @@
       }
 
       .sidebar.show {
+        height: auto;
+        max-height: 90vh;
         min-height: 400px;
         visibility: visible;
+        transition: height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
       }
 
-      /* Smooth close transition */
-      .sidebar:not(.show) {
-        transition: height 0.5s ease, visibility 0.5s ease 0.5s;
+      .sidebar-content {
+        overflow-y: auto;
+        padding-bottom: 20px;
       }
+
+      /* .sidebar:not(.show) {
+        transition: height 0.5s ease, visibility 0.5s ease 0.5s;
+      } */
 
       body {
         position: relative;
@@ -326,7 +335,7 @@
       }
     }
 
- 
+
     @media (min-width: 768px) {
       .sidebar {
         height: 100vh;
@@ -349,98 +358,97 @@
     }
 
     /* Add these styles to your existing mobile media query */
-@media (max-width: 768px) {
-  .main-title{
-    padding-top: 40px;
-  }
-  .section {
-    padding: 1.25rem;
-    margin-bottom: 2rem;
-    border-radius: 6px;
-  }
+    @media (max-width: 768px) {
+      .main-title {
+        padding-top: 40px;
+      }
 
-  .section h2 {
-    font-size: 1.3rem;
-    padding-left: 0.5rem;
-    margin-bottom: 1.25rem;
-    border-left-width: 3px;
-  }
+      .section {
+        padding: 1.25rem;
+        margin-bottom: 2rem;
+        border-radius: 6px;
+      }
 
-  .section ul {
-    margin-left: 1rem;
-    padding-left: 1rem;
-  }
+      .section h2 {
+        font-size: 1.3rem;
+        padding-left: 0.5rem;
+        margin-bottom: 1.25rem;
+        border-left-width: 3px;
+      }
 
-  .section ul li {
-    margin-bottom: 0.75rem;
-    line-height: 1.5;
-  }
+      .section ul {
+        margin-left: 1rem;
+        padding-left: 1rem;
+      }
 
-  .section ul ul {
-    margin-left: 1rem;
-    padding-left: 0.5rem;
-  }
+      .section ul li {
+        margin-bottom: 0.75rem;
+        line-height: 1.5;
+      }
 
-  .section-description {
-    font-size: 0.9rem;
-    line-height: 1.5;
-    margin-bottom: 1.25rem;
-  }
+      .section ul ul {
+        margin-left: 1rem;
+        padding-left: 0.5rem;
+      }
 
-  code {
-    font-size: 0.85rem;
-    padding: 1px 4px;
-    word-break: break-word;
-  }
+      .section-description {
+        font-size: 0.9rem;
+        line-height: 1.5;
+        margin-bottom: 1.25rem;
+      }
 
-  .highlight {
-    font-weight: 600;
-  }
+      code {
+        font-size: 0.85rem;
+        padding: 1px 4px;
+        word-break: break-word;
+      }
 
-  /* Better spacing for nested lists */
-  li > ul {
-    margin-top: 0.5rem;
-  }
+      .highlight {
+        font-weight: 600;
+      }
 
-  /* Improve video sizing */
-  video {
-    margin: 1rem auto;
-    border-radius: 4px;
-  }
+      li>ul {
+        margin-top: 0.5rem;
+      }
 
-  /* Adjust PDF container */
-  .pdf-container {
-    height: 50vh;
-    min-height: 350px;
-    margin: 1rem 0;
-  }
-}
 
-/* Additional improvements for very small screens */
-@media (max-width: 480px) {
-  .section {
-    padding: 1rem;
-  }
+      video {
+        margin: 1rem auto;
+        border-radius: 4px;
+      }
 
-  .section h2 {
-    font-size: 1.25rem;
-  }
+      .pdf-container {
+        height: 50vh;
+        min-height: 350px;
+        margin: 1rem 0;
+      }
+    }
 
-  .section ul {
-    font-size: 0.9rem;
-  }
+    /* Additional improvements for very small screens */
+    @media (max-width: 480px) {
+      .section {
+        padding: 1rem;
+      }
 
-  .content {
-    padding: 1rem;
-  }
-}
+      .section h2 {
+        font-size: 1.25rem;
+      }
+
+      .section ul {
+        font-size: 0.9rem;
+      }
+
+      .content {
+        padding: 1rem;
+      }
+    }
   </style>
 </head>
 
 <body>
 
 
-  <div class="sidebar" id="sidebar">
+  <div class="sidebar collapse" id="sidebar">
     <div class="sidebar-content">
       <h2 class="main-title">Data Import and Reimport<br>User Guide</h2>
       <div class="accordion" id="navAccordion">
@@ -498,11 +506,13 @@
 
   <div class="content">
 
-    <button class="btn btn-dark d-md-none menu-toggle" id="menuToggleBtn">
-      ☰
-    </button>
+<button class="btn btn-dark d-md-none menu-toggle" id="menuToggleBtn" 
+        data-toggle="collapse" data-target="#sidebar" aria-expanded="false">
+  ☰
+</button>
     <h1 class="main-title">Optimo User Guide: Data Import and Reimport</h1>
-    <p class="intro-para">This user guide provides detailed instructions for using the Data Import and Reimport Tool in the Optimo system,
+    <p class="intro-para">This user guide provides detailed instructions for using the Data Import and Reimport Tool in
+      the Optimo system,
       focusing on eight key functionalities: Downloading the Template Sheet, Validating the Sheet, Importing Validated
       Data, Viewing Import History, Exporting Data with Related Entities, Modifying Values to Update Records, Deleting
       Records, and Viewing Export History. Each section includes step-by-step instructions followed by a video
@@ -797,7 +807,7 @@
     }
 
     // Smooth scroll for navigation links
-    navLink.forEach(link => { 
+    navLink.forEach(link => {
       link.addEventListener('click', function (e) {
         if (window.matchMedia('(max-width: 768px)').matches) {
           e.preventDefault();
