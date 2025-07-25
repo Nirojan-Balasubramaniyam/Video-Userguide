@@ -237,6 +237,13 @@
       height: auto;
     }
 
+    .menu-toggle{
+      padding: 0px 5px;
+    }
+    .intro-para{
+      text-align: justify;
+    }
+
     /* Mobile styles - sidebar opens from top to bottom */
     @media (max-width: 767.98px) {
       .sidebar {
@@ -278,7 +285,7 @@
 
       /* Smooth close transition */
       .sidebar:not(.show) {
-        transition: height 0.5s ease, visibility 0s ease 0.5s;
+        transition: height 0.5s ease, visibility 0.5s ease 0.5s;
       }
 
       body {
@@ -288,10 +295,6 @@
       .content {
         transition: margin-top 0.3s ease;
         margin-left: 0;
-      }
-
-      .sidebar.show~.content {
-        margin-top: 80vh;
       }
 
       .fixed-logo {
@@ -344,6 +347,93 @@
       left: 15px;
       z-index: 1060;
     }
+
+    /* Add these styles to your existing mobile media query */
+@media (max-width: 768px) {
+  .main-title{
+    padding-top: 40px;
+  }
+  .section {
+    padding: 1.25rem;
+    margin-bottom: 2rem;
+    border-radius: 6px;
+  }
+
+  .section h2 {
+    font-size: 1.3rem;
+    padding-left: 0.5rem;
+    margin-bottom: 1.25rem;
+    border-left-width: 3px;
+  }
+
+  .section ul {
+    margin-left: 1rem;
+    padding-left: 1rem;
+  }
+
+  .section ul li {
+    margin-bottom: 0.75rem;
+    line-height: 1.5;
+  }
+
+  .section ul ul {
+    margin-left: 1rem;
+    padding-left: 0.5rem;
+  }
+
+  .section-description {
+    font-size: 0.9rem;
+    line-height: 1.5;
+    margin-bottom: 1.25rem;
+  }
+
+  code {
+    font-size: 0.85rem;
+    padding: 1px 4px;
+    word-break: break-word;
+  }
+
+  .highlight {
+    font-weight: 600;
+  }
+
+  /* Better spacing for nested lists */
+  li > ul {
+    margin-top: 0.5rem;
+  }
+
+  /* Improve video sizing */
+  video {
+    margin: 1rem auto;
+    border-radius: 4px;
+  }
+
+  /* Adjust PDF container */
+  .pdf-container {
+    height: 50vh;
+    min-height: 350px;
+    margin: 1rem 0;
+  }
+}
+
+/* Additional improvements for very small screens */
+@media (max-width: 480px) {
+  .section {
+    padding: 1rem;
+  }
+
+  .section h2 {
+    font-size: 1.25rem;
+  }
+
+  .section ul {
+    font-size: 0.9rem;
+  }
+
+  .content {
+    padding: 1rem;
+  }
+}
   </style>
 </head>
 
@@ -412,7 +502,7 @@
       ☰
     </button>
     <h1 class="main-title">Optimo User Guide: Data Import and Reimport</h1>
-    <p>This user guide provides detailed instructions for using the Data Import and Reimport Tool in the Optimo system,
+    <p class="intro-para">This user guide provides detailed instructions for using the Data Import and Reimport Tool in the Optimo system,
       focusing on eight key functionalities: Downloading the Template Sheet, Validating the Sheet, Importing Validated
       Data, Viewing Import History, Exporting Data with Related Entities, Modifying Values to Update Records, Deleting
       Records, and Viewing Export History. Each section includes step-by-step instructions followed by a video
