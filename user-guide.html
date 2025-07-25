@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Optimo User Guide: Data Import and Reimport</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      display: flex;
+      min-height: 100vh;
+      background-color: #f4f6f8;
+    }
+
+    .sidebar {
+      width: 280px;
+      background-color: #000;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      position: fixed;
+      top: 0;
+      left: 0;
+      overflow: hidden;
+    }
+
+    .sidebar-content {
+      flex-grow: 1;
+      padding: 1.5rem;
+      overflow-y: auto;
+    }
+
+    .sidebar h2.main-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      text-align: center;
+      margin: 1rem 0;
+      line-height: 1.4;
+    }
+
+    .accordion {
+      margin-top: 2rem;
+    }
+
+    .accordion-item {
+      background-color: transparent;
+      border: none;
+      margin-bottom: 1rem;
+    }
+
+    .accordion-button {
+      background-color: transparent !important;
+      color: #fff !important;
+      font-size: 0.95rem;
+      font-weight: 500;
+      padding: 0.75rem 1rem;
+      border: none;
+      box-shadow: none !important;
+    }
+
+    .accordion-button:not(.collapsed) {
+      background-color: #1a1a1a !important;
+      color: #0d6efd !important;
+      font-weight: 600;
+    }
+
+    .accordion-button::after {
+      filter: invert(1);
+    }
+
+    .accordion-body {
+      padding: 0.5rem 1rem;
+    }
+
+    .accordion-body a.nav-link {
+      display: block;
+      color: #bbb;
+      text-decoration: none;
+      padding: 0.5rem 1rem;
+      font-size: 0.9rem;
+      border-left: 3px solid transparent;
+      transition: all 0.2s ease;
+    }
+
+    .accordion-body a.nav-link:hover {
+      background-color: #222;
+      color: #fff;
+      border-left-color: #0d6efd;
+    }
+
+    .accordion-body a.nav-link.active {
+      background-color: #333;
+      color: #fff;
+      border-left-color: #0d6efd;
+      font-weight: 500;
+    }
+
+    .sidebar-footer {
+      padding: 1rem;
+      font-size: 0.8rem;
+      color: #888;
+      text-align: center;
+      border-top: 1px solid #444;
+    }
+
+    .content {
+      margin-left: 280px;
+      flex-grow: 1;
+      padding: 2rem;
+      overflow-y: auto;
+      background-color: #fff;
+    }
+
+    .content h1.main-title {
+      font-size: 1.8rem;
+      color: #2c3e50;
+      border-bottom: 2px solid #0d6efd;
+      padding-bottom: 0.5rem;
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+
+    .section {
+      margin-bottom: 2.5rem;
+      padding: 1.5rem;
+      background-color: #f9f9f9;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    }
+
+    .section h2 {
+      font-size: 1.4rem;
+      color: #2c3e50;
+      margin-bottom: 1rem;
+      border-left: 4px solid #0d6efd;
+      padding-left: 0.75rem;
+    }
+
+    .section-description {
+      font-style: italic;
+      color: #555;
+      margin-bottom: 1rem;
+      font-size: 0.95rem;
+    }
+
+    .section ul {
+      list-style-type: disc;
+      margin-left: 1.5rem;
+      font-size: 0.95rem;
+    }
+
+    .section ul li {
+      margin-bottom: 0.5rem;
+    }
+
+    .section ul ul {
+      list-style-type: circle;
+      margin-left: 1.5rem;
+    }
+
+    code {
+      background-color: #e8ecef;
+      padding: 2px 5px;
+      border-radius: 3px;
+      font-size: 0.9rem;
+    }
+
+    .highlight {
+      color: #e74c3c;
+      font-weight: bold;
+    }
+
+    video {
+      width: 100%;
+      height: auto;
+      display: block;
+      margin: 1.5rem auto;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      object-fit: cover;
+    }
+
+    .pdf-container {
+      width: 100%;
+      height: 80vh;
+      min-height: 600px;
+      margin: 1.5rem 0;
+      border-radius: 5px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .pdf-container iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+    }
+
+    .pdf-fallback {
+      text-align: center;
+      margin-top: 1rem;
+    }
+
+    .pdf-fallback a {
+      color: #0d6efd;
+      text-decoration: none;
+      font-size: 0.95rem;
+    }
+
+    .pdf-fallback a:hover {
+      text-decoration: underline;
+    }
+
+    .fixed-logo {
+      position: fixed;
+      top: 15px;
+      right: 15px;
+      max-width: 80px;
+      z-index: 1050;
+      opacity: 0.85;
+      pointer-events: none;
+    }
+
+    .fixed-logo img {
+      max-width: 100%;
+      height: auto;
+    }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+      }
+
+      .content {
+        margin-left: 0;
+        padding: 1rem;
+      }
+
+      .pdf-container {
+        height: 60vh;
+        min-height: 400px;
+      }
+
+      .fixed-logo {
+        max-width: 60px;
+        top: 10px;
+        right: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <div class="sidebar-content">
+      <h2 class="main-title">Data Import and Reimport<br>User Guide</h2>
+      <div class="accordion" id="navAccordion">
+        <div class="accordion-item">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne">
+              Data Import
+            </button>
+          </h2>
+          <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#navAccordion">
+            <div class="accordion-body">
+              <a href="#section1" class="nav-link">1. Download the Template Sheet</a>
+              <a href="#section2" class="nav-link">2. Validate the Sheet</a>
+              <a href="#section3" class="nav-link">3. Import Validated Data</a>
+              <a href="#section4" class="nav-link">4. Import History</a>
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo">
+              Data Reimport
+            </button>
+          </h2>
+          <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#navAccordion">
+            <div class="accordion-body">
+              <a href="#section5" class="nav-link">1. Export Data with Related Entities</a>
+              <a href="#section6" class="nav-link">2. Modify Values to Update Records</a>
+              <a href="#section7" class="nav-link">3. Delete Records</a>
+              <a href="#section8" class="nav-link">4. Export History</a>
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree">
+              Release Notes
+            </button>
+          </h2>
+          <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#navAccordion">
+            <div class="accordion-body">
+              <a href="#releaseNotes" class="nav-link">View Release Notes</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="sidebar-footer">
+      © 2025 Optimo Systems. All rights reserved.
+    </div>
+  </div>
+
+  <div class="content">
+    <h1 class="main-title">Optimo User Guide: Data Import and Reimport</h1>
+    <p>This user guide provides detailed instructions for using the Data Import and Reimport Tool in the Optimo system, focusing on eight key functionalities: Downloading the Template Sheet, Validating the Sheet, Importing Validated Data, Viewing Import History, Exporting Data with Related Entities, Modifying Values to Update Records, Deleting Records, and Viewing Export History. Each section includes step-by-step instructions followed by a video demonstration to help both technical and non-technical users perform bulk data operations efficiently and accurately.</p>
+
+    <div id="section1" class="section">
+      <h2>1. Download the Template Sheet</h2>
+      <p class="section-description">Step-by-step to log in and open the data import tool.</p>
+      <ul>
+        <li><strong>Access the Tool</strong>: Log in to the Optimo system and navigate to the <code>Data Import</code> menu.</li>
+        <li><strong>Select Entity</strong>: Choose the <code>Item</code> entity from the list to access the Item Import interface.</li>
+        <li><strong>Download Template</strong>: Click the <code>Download Template</code> button in the top right corner.</li>
+        <li><strong>Template Structure</strong>: The downloaded Excel file contains five tabs:
+          <ul>
+            <li><code>Item</code>: For primary item details.</li>
+            <li><code>Item Asset</code>: For additional assets (if applicable).</li>
+            <li><code>Item Price</code>: For multiple pricing types.</li>
+            <li><code>Item Sales Category</code>: For assigning sales categories.</li>
+            <li><code>Item Sales Channel</code>: For assigning sales channels.</li>
+          </ul>
+        </li>
+        <li><strong>Smart Dropdowns</strong>: The template includes dropdowns populated with master data (e.g., Venue Names, Asset Names, Sales Categories, Sales Channels) directly from the database, reducing errors by allowing users to select valid values instead of typing manually.</li>
+        <li><strong>Color-Coded Fields</strong>:
+          <ul>
+            <li><span class="highlight">Dark Orange</span>: Mandatory fields (cannot be blank).</li>
+            <li><span class="highlight">Light Orange (Pearl)</span>: Conditionally mandatory based on other field values.</li>
+            <li><span class="highlight">White</span>: Optional fields.</li>
+          </ul>
+        </li>
+        <li><strong>Purpose</strong>: This template ensures data consistency and minimizes manual entry errors by providing a structured format with built-in validations.</li>
+      </ul>
+      <video  style="object-fit: cover;" controls>
+        <source src="./Vidoes/Download_Item_Template_UG_V2.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+    </div>
+
+    <div id="section2" class="section">
+      <h2>2. Validate the Sheet</h2>
+      <p class="section-description">How to validate the sheet and correct errors.</p>
+      <ul>
+        <li><strong>Prepare the Sheet</strong>: Fill the Excel template with item data, adhering to the color-coded field requirements and dropdown selections.</li>
+        <li><strong>Upload the Sheet</strong>: In the <code>Upload</code> section of the Item Import interface, select the filled Excel file and click <code>Start Validation</code>.</li>
+        <li><strong>Validation Checks</strong>:
+          <ul>
+            <li>Ensures dropdown values match the database (e.g., Venue, Asset, Configuration).</li>
+            <li>Verifies numeric fields contain numbers, not text.</li>
+            <li>Confirms date fields use the MM/DD/YYYY format.</li>
+            <li>Checks for duplicate item names or invalid configurations (e.g., a configuration not matching the selected asset or venue).</li>
+            <li>Ensures mandatory fields (<span class="highlight">Dark Orange</span>) and conditionally mandatory fields (<span class="highlight">Light Orange</span>) are filled correctly based on item type and business logic (e.g., Gross Price is required if Price Setting is “Includes Tax”).</li>
+          </ul>
+        </li>
+        <li><strong>Validation Report</strong>: If errors are found, the system generates a report highlighting problematic rows in red, with error messages in the last column.</li>
+        <li><strong>Fix Errors</strong>: Correct errors in the same Excel file and re-upload for validation until all issues are resolved.</li>
+        <li><strong>Purpose</strong>: Validation prevents bad data from entering the system, ensuring high data quality.</li>
+      </ul>
+      <video  style="object-fit: cover;" controls>
+        <source src="./Vidoes/Import_Item_Validation_UG_V2.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+    </div>
+
+    <div id="section3" class="section">
+      <h2>3. Import Validated Data</h2>
+      <p class="section-description">Upload and import the verified data into the system.</p>
+      <ul>
+        <li><strong>Initiate Import</strong>: In the Item Import interface, after successful validation, click <code>Start Import</code>.</li>
+        <li><strong>Import Process</strong>: The system processes the validated Excel file, creating or updating item records in the database.</li>
+        <li><strong>Import Report</strong>: After import, a detailed report is displayed, including:
+          <ul>
+            <li>Total rows processed.</li>
+            <li>Number of successful imports.</li>
+            <li>Any errors encountered (with reasons).</li>
+            <li>Newly generated <code>Item IDs</code> for tracking.</li>
+          </ul>
+        </li>
+        <li><strong>Purpose</strong>: This step finalizes the import process, ensuring accurate data entry with a clear summary of results.</li>
+      </ul>
+      <video  style="object-fit: cover;" controls>
+        <source src="./Vidoes/Import_Item_Records_UG_V2.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+    </div>
+
+    <div id="section4" class="section">
+      <h2>4. Import History</h2>
+      <p class="section-description">View the history of all imported files.</p>
+      <ul>
+        <li><strong>Access Import History</strong>: Navigate to the <code>Data Import</code> menu and select the Import History option (if available in the interface).</li>
+        <li><strong>View Details</strong>: The history displays a list of previous imports, including:
+          <ul>
+            <li>Date and time of the import.</li>
+            <li>User who performed the import.</li>
+            <li>Number of rows processed and successfully imported.</li>
+            <li>Errors encountered (if any).</li>
+            <li>Generated <code>Item IDs</code> for reference.</li>
+          </ul>
+        </li>
+        <li><strong>Purpose</strong>: Import History provides transparency and traceability, allowing users to verify past imports and troubleshoot issues.</li>
+      </ul>
+      <video  style="object-fit: cover;" controls>
+        <source src="./Vidoes/Import_Item_History_UG_V2.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+    </div>
+
+    <div id="section5" class="section">
+      <h2>5. Export Data with Related Entities</h2>
+      <p class="section-description">How to export data including related tables or values.</p>
+      <ul>
+        <li><strong>Access Item List</strong>: Navigate to <code>Events & Products → Items</code> to view the Item List.</li>
+        <li><strong>Select Items</strong>: Check the boxes next to individual items, select an entire page, or use <code>Select All</code> to choose all matching items.</li>
+        <li><strong>Initiate Export</strong>: Click the <code>Export</code> button, which appears with the number of selected items.</li>
+        <li><strong>Choose Related Data</strong>: A popup prompts you to select which related data to include:
+          <ul>
+            <li><code>Item</code> (always included).</li>
+            <li><code>Item Asset</code>.</li>
+            <li><code>Item Price</code>.</li>
+            <li><code>Item Sales Category</code>.</li>
+            <li><code>Item Sales Channel</code>.</li>
+          </ul>
+        </li>
+        <li><strong>Exported File</strong>: The exported Excel file mirrors the import template structure but is pre-filled with selected items’ data, including:
+          <ul>
+            <li><code>Item ID</code> (protected column).</li>
+            <li>Existing values for all fields.</li>
+            <li>A <code>Delete</code> column for each row.</li>
+          </ul>
+        </li>
+        <li><strong>Purpose</strong>: Exporting allows users to review or modify item data efficiently, including only the necessary related entities.</li>
+      </ul>
+      <video  style="object-fit: cover;" controls>
+        <source src="./Vidoes/Export_Item_Records_UG_V2.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+    </div>
+
+    <div id="section6" class="section">
+      <h2>6. Modify Values to Update Records</h2>
+      <p class="section-description">Edit exported data and re-import to update records.</p>
+      <ul>
+        <li><strong>Edit the Exported File</strong>: Open the exported Excel file and update fields such as:
+          <ul>
+            <li>Item names, descriptions, prices, categories, or sales channels.</li>
+            <li>Additional assets or prices in their respective tabs.</li>
+          </ul>
+        </li>
+        <li><strong>Smart Field Protection</strong>:
+          <ul>
+            <li><strong>Permanent Protection</strong>: <code>Item ID</code> and core system references are locked to prevent accidental changes.</li>
+            <li><strong>Partial Protection</strong>: Fields like <code>Item Type</code> are locked for existing rows but editable for new rows.</li>
+          </ul>
+        </li>
+        <li><strong>Upload Modified File</strong>: Return to the <code>Data Import</code> menu, select the modified file, and upload it.</li>
+        <li><strong>Validation</strong>: The system validates updates to ensure no duplicate names, invalid configurations, or missing dependent data.</li>
+        <li><strong>Import Updates</strong>: After validation, click <code>Start Import</code> to apply changes.</li>
+        <li><strong>Purpose</strong>: This feature allows bulk updates to item data while maintaining data integrity through validation and field protection.</li>
+      </ul>
+      <video  style="object-fit: cover;" controls>
+        <source src="./Vidoes/Update_Item_Records_UG_V2.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+    </div>
+
+    <div id="section7" class="section">
+      <h2>7. Delete Records</h2>
+      <p class="section-description">Steps to remove unwanted data safely.</p>
+      <ul>
+        <li><strong>Mark for Deletion</strong>: In the exported Excel file:
+          <ul>
+            <li>In the <code>Item</code> tab, set the <code>Delete</code> column to <code>Yes</code> to delete an entire item and its related records (row highlighted in red as a warning).</li>
+            <li>In related tabs (e.g., <code>Item Asset</code>, <code>Item Price</code>), set <code>Delete</code> to <code>Yes</code> to delete only that specific asset or price.</li>
+            <li>Note: If an item has only one sales channel, it cannot be deleted but can be modified.</li>
+          </ul>
+        </li>
+        <li><strong>Upload and Validate</strong>: Upload the modified file via the <code>Data Import</code> menu and run validation to ensure deletions are valid.</li>
+        <li><strong>Confirm Deletion</strong>: Click <code>Start Import</code> to process deletions.</li>
+        <li><strong>Import Report</strong>: The report confirms which records were deleted, updated, or failed.</li>
+        <li><strong>Purpose</strong>: This feature enables bulk deletion of items or specific related data with clear visual cues and validation checks.</li>
+      </ul>
+      <video style="object-fit: cover;" controls>
+        <source src="./Vidoes/Delete_Item_Records_UG_V2.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+    </div>
+
+    <div id="section8" class="section">
+      <h2>8. Export History</h2>
+      <p class="section-description">Track past exports for auditing and reference.</p>
+      <ul>
+        <li><strong>Access Export History</strong>: Navigate to the <code>Events & Products → Items</code> section and select the Export History option (if available).</li>
+        <li><strong>View Details</strong>: The history shows a log of previous exports, including:
+          <ul>
+            <li>Date and time of the export.</li>
+            <li>User who performed the export.</li>
+            <li>Number of items exported.</li>
+            <li>Selected related entities (e.g., Item Asset, Item Price).</li>
+          </ul>
+        </li>
+        <li><strong>Purpose</strong>: Export History provides a record of exported data, aiding in auditing and tracking changes over time.</li>
+      </ul>
+      <video style="object-fit: cover;" controls>
+        <source src="./Vidoes/Export_Item_History_UG_V2.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+    </div>
+
+    <div id="releaseNotes" class="section">
+      <h2>9. Release Notes</h2>
+      <p class="section-description">View the release notes for the Data Import and Reimport Tool.</p>
+      <div class="pdf-container">
+        <iframe src="./Item_Import_Export_&_Re-Import_Release_Note.pdf#zoom=100&toolbar=1" title="Release Notes PDF"></iframe>
+      </div>
+      <div class="pdf-fallback">
+        <p>If the PDF does not display correctly, <a href="./Item_Import_Export_&_Re-Import_Release_Note.pdf" target="_blank">click here to view or download the release notes</a>.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="fixed-logo">
+    <img src="Optimo_Logo.png" alt="Optimo Logo" />
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Highlight active nav link based on scroll or click
+    const navLinks = document.querySelectorAll('.nav-link');
+    navLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        navLinks.forEach(l => l.classList.remove('active'));
+        link.classList.add('active');
+      });
+    });
+
+    // Set active link on page load based on hash
+    window.addEventListener('DOMContentLoaded', () => {
+      const hash = window.location.hash;
+      if (hash) {
+        const targetLink = document.querySelector(`.nav-link[href='${hash}']`);
+        if (targetLink) {
+          navLinks.forEach(l => l.classList.remove('active'));
+          targetLink.classList.add('active');
+          // Expand the relevant accordion
+          const accordionItem = targetLink.closest('.accordion-collapse');
+          if (accordionItem) {
+            const collapse = new bootstrap.Collapse(accordionItem, { toggle: false });
+            collapse.show();
+          }
+        }
+      }
+    });
+
+    // Update active link on scroll
+    window.addEventListener('scroll', () => {
+      const sections = document.querySelectorAll('.section');
+      let currentSection = '';
+      sections.forEach(section => {
+        const sectionTop = section.offsetTop - 100;
+        if (window.scrollY >= sectionTop) {
+          currentSection = section.getAttribute('id');
+        }
+      });
+      if (currentSection) {
+        navLinks.forEach(link => {
+          link.classList.remove('active');
+          if (link.getAttribute('href') === `#${currentSection}`) {
+            link.classList.add('active');
+          }
+        });
+      }
+    });
+  </script>
+</body>
+</html>
